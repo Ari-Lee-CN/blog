@@ -9,9 +9,76 @@
         img{
             max-width:100%;
         }
+        #painter {
+            border: 1px solid black;
+        }
     </style>
 </head>
 <body>
+    <canvas id="painter" width="100" height="100"></canvas>
+    <script>
+        var canvas = document.getElementById("painter");
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+        let ctx = canvas.getContext('2d');
+        ctx.lindeCap = 'round';
+        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        //查看是否是触屏设备
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "none";//边框颜色
+        
+        let last;
+
+        if(isTouchDevice){
+            canvas.ontouchstart = (placeholder) => {
+                let x = placeholder.touches[0].clientX;
+                let y = placeholder.touches[0].clientY;
+                last = [x,y];
+            }
+           canvas.ontouchmove = (placeholder) => {
+               let x = placeholder.touches[0].clientX;
+               let y = placeholder.touches[0].clientY;
+               drawLine(last[0],last[1],x,y);
+               last = [x,y];
+               console.log('是触屏设备')
+           }
+        }else{
+            let painting = false;
+            console.log('不是触屏设备')
+            canvas.onmousedown = (placeholder) => {
+                painting = true;
+                last = [placeholder.clientX, placeholder.clientY]
+                console.log('我点下去了')
+            }
+            canvas.onmousemove = (placeholder) => {
+                if (painting === true){
+                    /*
+                    ctx.beginPath();
+                    ctx.arc(placeholder.clientX, placeholder.clientY, 8, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.fill();
+                    */
+                   drawLine(last[0],last[1],placeholder.clientX,placeholder.clientY);
+                    last = [placeholder.clientX,placeholder.clientY]
+                }else{
+                    console.log('点击左键画画');
+                }
+            }
+            canvas.onmouseup = () => {
+                painting = false;
+            }
+        
+        }
+
+        
+    </script>
+    <div>
     <nav>
         <ol>
             <li><a href="#life">生平</a></li>
@@ -20,23 +87,6 @@
             <li><a href="#winning">获奖记录</a></li>
         </ol>
     </nav>
-    <h1>标签快捷写法</h1>
-        <p>兄弟元素+ <br>
-            寻找上级用^ 返回几级就使用几个<br>
-            属性用[] <br>
-            $符号自动编辑 <br>
-            内容用{} <br>
-        </p>
-        <span>选中区域 ctrl+N启用查找替换快速更替内容</span>
-        <span>alt+B 默认浏览器打开</span>
-        <span>ctrl+shift+P开启命令面板  emmet中有个wrap指令</span>
-        <span>设置宽度高度使得图片对齐一致</span>
-        <span>以p标签区分段落</span>
-    <h1>注意事项</h1>
-        <strong>不能让图片变形</strong>
-        <strong>图片不能超过300KB，需要压缩</strong>
-        <p>嵌套a标签让图片变为超链接</p>
-    <hr>
     <h1>郝景芳</h1>
         <p>
             郝景芳（1984年7月27日－），天津人，中国当代女性科幻作家。
@@ -101,5 +151,6 @@
         <li>2017年第十六届华语文学传媒大奖年度最具潜力新人奖，《人之彼岸》。</li>
         <li>2018年第一届梁羽生文学奖科幻小说类大奖，《孤独深处》。</li>
     </ul>
+    </div>
     </body>
 </html>
