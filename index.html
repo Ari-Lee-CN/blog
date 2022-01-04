@@ -8,23 +8,53 @@
     <link rel="stylesheet" href="test.css">
 </head>
 <body>
-    <canvas id="canvas">
-        <script>
-            var canvas = document.getElementById('canvas');
-  if (canvas.getContext){
-    var ctx = canvas.getContext('2d');
-
-    ctx.beginPath();
-    ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // 绘制
-    ctx.moveTo(110, 75);
-    ctx.arc(75, 75, 35, 0, Math.PI, false);   // 口(顺时针)
-    ctx.moveTo(65, 65);
-    ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // 左眼
-    ctx.moveTo(95, 65);
-    ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // 右眼
-    ctx.stroke();
-  }
-        </script>
+    <div><span>可以画画哦</span></div>
+    <canvas id="canvas"></canvas>
     </div>
 </body>
+<script>
+    let canvas = document.getElementById("canvas");
+    canvas.width = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
+    let ctx = canvas.getContext("2d");
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 8;
+    ctx.lineCap = "round";
+
+    let painting = false;
+    let last
+    function drawLine(x1,y1,x2,y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.stroke();
+    }
+
+    var isTouchDevice = 'ontouchstart' in document.documentElement;
+    if (isTouchDevice) {
+        canvas.ontouchmove = (e) => {
+            let x = e.touches[0].clientX;
+            let y = e.touches[0].clientY;
+            ctx.beginPath();
+            ctx.arc(x, y,10,0,2 * Math.PI);
+            ctx.stroke();
+            ctx.fill();
+        }
+    }else{
+        canvas.onmousedown = (e) => {
+            painting = true;
+            last = [e.clientX,e.clientY];
+        }
+        canvas.onmousemove = (e) => {
+            if (painting===true){
+                drawLine(last[0],last[1],e.clientX,e.clientY);
+                last = [e.clientX,e.clientY];
+            }
+        }
+        canvas.onmouseup = () =>{
+            painting = false;
+        }
+    }
+</script>
 </html>
