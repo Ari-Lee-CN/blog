@@ -16,68 +16,6 @@
 </head>
 <body>
     <canvas id="painter" width="100" height="100"></canvas>
-    <script>
-        var canvas = document.getElementById("painter");
-        canvas.width = document.documentElement.clientWidth;
-        canvas.height = document.documentElement.clientHeight;
-        function drawLine(x1, y1, x2, y2) {
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-        }
-        let ctx = canvas.getContext('2d');
-        ctx.lindeCap = 'round';
-        var isTouchDevice = 'ontouchstart' in document.documentElement;
-        //查看是否是触屏设备
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "none";//边框颜色
-        
-        let last;
-
-        if(isTouchDevice){
-            canvas.ontouchstart = (placeholder) => {
-                let x = placeholder.touches[0].clientX;
-                let y = placeholder.touches[0].clientY;
-                last = [x,y];
-            }
-           canvas.ontouchmove = (placeholder) => {
-               let x = placeholder.touches[0].clientX;
-               let y = placeholder.touches[0].clientY;
-               drawLine(last[0],last[1],x,y);
-               last = [x,y];
-               console.log('是触屏设备')
-           }
-        }else{
-            let painting = false;
-            console.log('不是触屏设备')
-            canvas.onmousedown = (placeholder) => {
-                painting = true;
-                last = [placeholder.clientX, placeholder.clientY]
-                console.log('我点下去了')
-            }
-            canvas.onmousemove = (placeholder) => {
-                if (painting === true){
-                    /*
-                    ctx.beginPath();
-                    ctx.arc(placeholder.clientX, placeholder.clientY, 8, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.fill();
-                    */
-                   drawLine(last[0],last[1],placeholder.clientX,placeholder.clientY);
-                    last = [placeholder.clientX,placeholder.clientY]
-                }else{
-                    console.log('点击左键画画');
-                }
-            }
-            canvas.onmouseup = () => {
-                painting = false;
-            }
-        
-        }
-
-        
-    </script>
     <div>
     <nav>
         <ol>
@@ -153,4 +91,64 @@
     </ul>
     </div>
     </body>
+    <script>
+        var canvas = document.getElementById("painter");
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+        let ctx = canvas.getContext('2d');
+        ctx.lindeCap = 'round';
+        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        //查看是否是触屏设备
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "none";//边框颜色
+        
+        let last;
+
+        if(isTouchDevice){
+            canvas.ontouchstart = (placeholder) => {
+                let x = placeholder.touches[0].clientX;
+                let y = placeholder.touches[0].clientY;
+                last = [x,y];
+            }
+           canvas.ontouchmove = (placeholder) => {
+               let x = placeholder.touches[0].clientX;
+               let y = placeholder.touches[0].clientY;
+               drawLine(last[0],last[1],x,y);
+               last = [x,y];
+               console.log('是触屏设备')
+           }
+        }else{
+            let painting = false;
+            console.log('不是触屏设备')
+            canvas.onmousedown = (placeholder) => {
+                painting = true;
+                last = [placeholder.clientX, placeholder.clientY]
+                console.log('我点下去了')
+            }
+            canvas.onmousemove = (placeholder) => {
+                if (painting === true){
+                    /*
+                    ctx.beginPath();
+                    ctx.arc(placeholder.clientX, placeholder.clientY, 8, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.fill();
+                    */
+                   drawLine(last[0],last[1],placeholder.clientX,placeholder.clientY);
+                    last = [placeholder.clientX,placeholder.clientY]
+                }else{
+                    console.log('点击左键画画');
+                }
+            }
+            canvas.onmouseup = () => {
+                painting = false;
+            }
+        
+        }       
+    </script>
 </html>
