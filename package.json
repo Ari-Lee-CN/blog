@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "global": "^4.4.0",
+    "yarn": "^1.22.17"
+  },
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Ari-Lee-CN/blog.git",
+  "author": "arilee <arileecn@email.com>",
+  "license": "MIT"
+}
