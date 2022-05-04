@@ -44,7 +44,7 @@ inline-block也是从左到右
 
 #### 宽度
 
-**inline宽度时内部inline元素的和，不能勇width来指定**
+**inline宽度是内部inline元素的和，不能勇width来指定**
 
 block自动计算宽度，可以用width指定
 
