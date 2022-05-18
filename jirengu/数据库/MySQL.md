@@ -49,7 +49,7 @@ structured Query Language 结构查询语言，用于存取、查询、更新数
 
    ​		stu_age int not null ,
 
-   ​		stu_tel cha(11) not null unique
+   ​		stu_tel char(11) not null unique
 
    );
 
@@ -164,7 +164,7 @@ create table books(
 );
 ~~~
 
-党一个字段声明为逐渐之后，添加数据时：
+当一个字段声明为主键之后，添加数据时：
 
 1. 此字段数据不能为null
 
@@ -374,6 +374,8 @@ select from tableName where condition order by columnName asc|desc,(columnName a
 * sum()
 
 * avg() 求平均值
+
+* round 保留指定位小数点
 
 #### 日期函数、字符串函数
 
