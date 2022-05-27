@@ -220,7 +220,7 @@ function Father(props){
 
 显式：
 
-~~~react'
+~~~react
 function Son(props){
      console.log(props) // {name: "alien", age: "28"}
      return <div> hello,world </div>
@@ -256,9 +256,43 @@ function Index(){
 
 ## 实践demo
 
+### 组件使用
+
+~~~js
+export default  () => {
+    const form =  React.useRef(null)
+    const submit =()=>{
+        /* 表单提交 */
+        form.current.submitForm((formValue)=>{
+            console.log(formValue)
+        })
+    }
+    const reset = ()=>{
+        /* 表单重置 */
+        form.current.resetForm()
+    }
+    return <div className='box' >
+        <Form ref={ form } >
+            <FormItem name="name" label="我是"  >
+                <Input   />
+            </FormItem>
+            <FormItem name="mes" label="我想对大家说"  >
+                <Input   />
+            </FormItem>
+            <input  placeholder="不需要的input" />
+            <Input/>
+        </Form>
+        <div className="btns" >
+            <button className="searchbtn"  onClick={ submit } >提交</button>
+            <button className="concellbtn" onClick={ reset } >重置</button>
+        </div>
+    </div>
+}
+~~~
+
 ### 1.编写<From>
 
-~~~react
+~~~js
 class Form extends React.Component{
     state={
         formData:{}
@@ -278,7 +312,7 @@ class Form extends React.Component{
         })
     }
     //设置表单数据层
-    saveValue=(name,value)=>{
+    setValue=(name,value)=>{
         this.setState({
             formData:{
                 ...this.state.formData,
@@ -286,5 +320,56 @@ class Form extends React.Component{
             }
         })
     }
-~~~
+    render(){
+        const {children} = this.props
+        const renderChildren = []
+        React.Children.forEach(children,(child)=>{
+            if(child.type.displayName === 'formItem'){
+                const {name} = child.props
+                //克隆FromItem节点，混入改变表单单元项的方法
+                const Children = React.cloneElement(child,{
+                    key:name, //加入ley提升渲染效果
+                    handleChange:this.setValue,//用于改变value
+                    value:this.state.formData[name] || '' //value值
+                },child.props.children);
+                renderChildren.push(Children)
+            }
+        })
+    return renderChildren
+    }
+}
 
+From.displayName = 'from'
+~~~
+* 首先考虑到<Form>在不适用forwardRef前提下，最好使用类组件，因为类组件才能获得实例
+* 创建formData属性，用于收集表单状态
+* 封装重置表单，提交表单，改变表单单元项的方法
+* 过滤除了FormItem以外的其他元素，这里使用了displayName来进行判断
+* 克隆FormItem节点，将handleChange和value混入props中
+
+### 3.编写<FormItem>
+
+~~~js
+function FormItem(props){
+    const { Children,name,handleChange,value,label} = props;
+    const onChange = (value) => {
+        handleChange(name,value)
+    }
+    return <div className="form">
+        <span className="label">{label}:</span>
+        {
+            React.isValidElement(children) && children.type.displayName === 'input' ? React.cloneElement(children,{conChange,value}):null
+        }
+    </div>
+}
+FormItem.displayName = 'formItem'
+~~~
+* FormItem 要绑定displayName属性，用于让<Form>识别<FormItem>
+* 声明onChange方法，通过props提供给<input>，作为改变value的回调函数
+* FormItem过滤除了input之外的其他元素
+
+~~~js
+function Input({onChange,value}){
+    return <input className="input" conchange = {(e)=>(onChange && onChange(e.target.value))} value={value}/>
+}
+~~~
