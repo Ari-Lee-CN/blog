@@ -1,0 +1,1 @@
+若两者的cookie的domain和path都相同会共享，若有一个不同，则该cookie不会共享
