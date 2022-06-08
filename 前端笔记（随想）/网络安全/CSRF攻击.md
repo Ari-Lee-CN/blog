@@ -1,7 +1,7 @@
-# CRFS
+# CSRF
 > cross-siete request forgery 跨站请求伪造，一种挟制用户在当前已登录的web应用程序上执行非本意的操作的攻击方法。
-> XSS利用的是用户对于指定网站的新人，CRFS利用的是网站对用户网页浏览器的信任
-
+> XSS利用的是用户对于指定网站的新人，CSRF利用的是网站对用户网页浏览器的信任
+[https://tech.meituan.com/2018/10/11/fe-security-csrf.html](美团技术团队)
 ## 原理
 [攻击原理图](https://segmentfault.com/img/bVbOUI9)
 1. 首选用户通过浏览器访问网银系统
